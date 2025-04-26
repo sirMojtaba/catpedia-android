@@ -7,9 +7,19 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
-composeBom = "2024.09.00"
+composeBom = "2025.04.01"
 appcompat = "1.7.0"
 material = "1.12.0"
+jetbrainsKotlinJvm = "2.0.21"
+hiltVersion = "2.54"
+retrofitVersion = "2.11.0"
+gsonConvertorVersion = "2.11.0"
+lifecycleKtx = "2.8.7"
+fragmentKtx = "1.8.6"
+hiltComposeVersion = "1.2.0"
+composeNavigation = "2.8.9"
+kotlinxImmutableCollections = "0.3.8"
+coil = "2.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -28,10 +38,44 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltVersion" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltVersion" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVersion" }
+retrofit-convertor = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofitVersion" }
+gson-convertor = { group = "com.google.code.gson", name = "gson", version.ref = "gsonConvertorVersion" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleKtx" }
+androidx-lifecycle-viewmodel-compose-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleKtx" }
+androidx-fragment-compose = { module = "androidx.fragment:fragment-compose", version.ref = "fragmentKtx" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
+androidx-compose-animation = { group = "androidx.compose.animation", name = "animation" }
+androidx-material1 = { group = "androidx.compose.material", name = "material" }
+androidx-material_icons = { group = "androidx.compose.material", name = "material-icons-extended" }
+hilt-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltComposeVersion" }
+androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "composeNavigation" }
+kotlin-immutable-collections = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxImmutableCollections"}
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
+[bundles]
+androidx-compose = [
+    "androidx-compose-bom",
+    "androidx-lifecycle-viewmodel-compose",
+    "androidx-lifecycle-viewmodel-compose-runtime",
+    "androidx-activity-compose",
+    "androidx-fragment-compose",
+    "androidx-compose-foundation",
+    "androidx-ui",
+    "androidx-compose-animation",
+    "androidx-ui-graphics",
+    "androidx-ui-tooling",
+    "androidx-ui-tooling-preview",
+    "androidx-material3",
+    "androidx-material1",
+    "androidx-material_icons"
+]

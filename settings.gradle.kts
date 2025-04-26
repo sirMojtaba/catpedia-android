@@ -23,3 +23,4 @@ rootProject.name = "Catopedia"
 include(":app")
 include(":data")
 include(":presentation")
+include(":domain")
