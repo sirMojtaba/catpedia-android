@@ -34,6 +34,8 @@ android {
 }
 
 dependencies {
+
+    //Project layer dependencies
     implementation(project(":domain"))
 
     //Retrofit
