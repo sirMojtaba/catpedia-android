@@ -1,12 +1,17 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
 }
 
 android {
     namespace = "com.example.presentation"
     compileSdk = 35
+
+    buildFeatures {
+        compose = true
+    }
 
     defaultConfig {
         minSdk = 21
@@ -42,6 +47,14 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.compiler)
     kapt(libs.hilt.compiler)
+
+    //Compose
+    val composeBom = platform(libs.androidx.compose.bom)
+    implementation(composeBom)
+    implementation(libs.bundles.androidx.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.hilt.compose)
+    implementation(libs.kotlin.immutable.collections)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -1,0 +1,13 @@
+package com.example.presentation.model
+
+import androidx.compose.runtime.Immutable
+import com.example.domain.model.Breed
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
+
+@Immutable
+data class BreedUiState(
+    val breeds: PersistentList<Breed> = persistentListOf(),
+    val error: String? = null,
+    val loading: Boolean = true
+)
