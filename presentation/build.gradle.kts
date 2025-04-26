@@ -56,6 +56,9 @@ dependencies {
     implementation(libs.hilt.compose)
     implementation(libs.kotlin.immutable.collections)
 
+    //Coil
+    implementation(libs.coil)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
