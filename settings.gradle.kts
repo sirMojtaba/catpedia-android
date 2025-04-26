@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "Catopedia"
 include(":app")
 include(":data")
+include(":presentation")
