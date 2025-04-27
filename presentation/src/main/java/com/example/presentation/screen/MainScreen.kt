@@ -22,7 +22,11 @@ fun MainScreen(modifier: Modifier = Modifier) {
         }
 
         composable(route = "detail_screen") { backStackEntry ->
-            DetailScreen(onUrlClick = {})
+            DetailScreen(onUrlClick = {navController.navigate("web_screen")})
+        }
+
+        composable(route = "web_screen") {
+            WebScreen(url = "https://en.wikipedia.org/wiki/Abyssinian_(cat)")
         }
     }
 }

@@ -52,24 +52,25 @@ fun DetailScreen(modifier: Modifier = Modifier, onUrlClick: () -> Unit) {
             Text(modifier = Modifier.padding(4.dp), text = "origin: ${breed.origin}")
             Text(modifier = Modifier.padding(4.dp), text = "temperament: ${breed.temperament}")
             Text(modifier = Modifier.padding(4.dp), text = "life span: ${breed.lifeSpan}")
-            Text(
-                modifier = Modifier
-                    .padding(4.dp)
-                    .clickable {
-                        onUrlClick()
-                    },
-                text = buildAnnotatedString {
-                    withStyle(
-                        style = SpanStyle(
-                            color = Color.Blue,
-                            textDecoration = TextDecoration.Underline
-                        )
-                    ) {
-                        append(breed.wikipediaUrl)
+            if (breed.wikipediaUrl.isNotBlank()) {
+                Text(
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .clickable {
+                            onUrlClick()
+                        },
+                    text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Blue,
+                                textDecoration = TextDecoration.Underline
+                            )
+                        ) {
+                            append(breed.wikipediaUrl)
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
-
 }
