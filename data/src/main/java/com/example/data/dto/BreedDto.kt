@@ -1,6 +1,7 @@
 package com.example.data.dto
 
 import com.example.domain.model.Breed
+import com.example.domain.model.BreedImage
 
 data class BreedDto(
     val id: String? = null,
@@ -8,7 +9,7 @@ data class BreedDto(
     val origin: String? = null,
     val description: String? = null,
     val wikipediaUrl: String? = null,
-    val image: BreedImageDto
+    val image: BreedImageDto? = null
 )
 
 fun BreedDto.toDomain(): Breed {
@@ -18,7 +19,10 @@ fun BreedDto.toDomain(): Breed {
         origin = origin.orEmpty(),
         description = description.orEmpty(),
         wikipediaUrl = wikipediaUrl.orEmpty(),
-        image = image.toDomain()
+        image = image?.toDomain() ?: BreedImage(
+            id = image?.id.orEmpty(),
+            url = image?.url.orEmpty()
+        )
 
     )
 }

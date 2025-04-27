@@ -20,6 +20,10 @@ class BreedsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<BreedUiState>(BreedUiState())
     val uiState = _uiState.asStateFlow()
 
+    init {
+        getBreeds()
+    }
+
     fun getBreeds() {
         viewModelScope.launch {
             runCatching {

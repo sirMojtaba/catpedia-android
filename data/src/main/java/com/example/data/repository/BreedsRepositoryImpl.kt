@@ -11,7 +11,7 @@ class BreedsRepositoryImpl @Inject constructor(
 ) : BreedsRepository {
 
     override suspend fun getBreeds(): List<Breed> {
-        return apiService.getBreeds().map {
+        return apiService.getBreeds("live_yiLUCdMhkSeU7S9JArlkNGAlQFEygxty4x9Efa2uGMlTJ8j2zfz3b8XjHHgvNseq").map {
             it.toDomain()
         }
     }

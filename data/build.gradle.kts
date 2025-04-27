@@ -47,6 +47,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.convertor)
     implementation(libs.gson.convertor)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
 
     //Hilt
     implementation(libs.hilt.android)
