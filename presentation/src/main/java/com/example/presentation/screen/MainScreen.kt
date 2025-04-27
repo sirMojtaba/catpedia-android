@@ -22,7 +22,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
         }
 
         composable(route = "detail_screen") { backStackEntry ->
-            DetailScreen()
+            DetailScreen(onUrlClick = {})
         }
     }
 }
