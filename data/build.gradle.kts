@@ -31,6 +31,11 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    packaging {
+        resources {
+            excludes += "META-INF/gradle/incremental.annotation.processors"
+        }
+    }
 }
 
 dependencies {
@@ -45,7 +50,6 @@ dependencies {
 
     //Hilt
     implementation(libs.hilt.android)
-    implementation(libs.hilt.compiler)
     kapt(libs.hilt.compiler)
 
     implementation(libs.androidx.core.ktx)

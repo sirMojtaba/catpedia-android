@@ -1,5 +1,6 @@
 [versions]
 agp = "8.9.2"
+javapoetVersion = "1.13.0"
 kotlin = "2.0.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -54,6 +55,7 @@ hilt-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", vers
 androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "composeNavigation" }
 kotlin-immutable-collections = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxImmutableCollections"}
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil"}
+squareup-javapoet = { module = "com.squareup:javapoet", version.ref = "javapoetVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -61,6 +63,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion" }
 
 [bundles]
 androidx-compose = [

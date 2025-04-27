@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hiltAndroid)
+    id("kotlin-kapt")
 }
 
 android {
@@ -37,13 +39,26 @@ android {
     buildFeatures {
         compose = true
     }
+    packaging {
+        resources {
+            excludes += "META-INF/gradle/incremental.annotation.processors"
+        }
+    }
 }
 
 dependencies {
 
     //Project layer dependencies
     implementation(project(":presentation"))
+    implementation(project(":data"))
 
+    //Hilt
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.compiler)
+    kapt(libs.hilt.compiler)
+
+    implementation(libs.squareup.javapoet)
+    kapt(libs.squareup.javapoet)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
