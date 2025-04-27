@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.example.catopedia.ui.theme.CatpediaTheme
-import com.example.presentation.screen.BreedsScreen
+import com.example.presentation.screen.MainScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             CatpediaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    BreedsScreen(modifier = Modifier.padding(innerPadding))
+                    MainScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }

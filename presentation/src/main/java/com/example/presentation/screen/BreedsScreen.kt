@@ -22,7 +22,9 @@ fun BreedsScreen(modifier: Modifier = Modifier, viewModel: BreedsViewModel = hil
     Column(modifier = Modifier.fillMaxSize()) {
         LazyColumn(modifier = Modifier.padding(4.dp)) {
             itemsIndexed(uiState.breeds) { index, item ->
-                BreedItem(modifier = Modifier.padding(4.dp).fillMaxWidth(), breed = item)
+                BreedItem(modifier = Modifier
+                    .padding(4.dp)
+                    .fillMaxWidth(), breed = item)
             }
         }
     }
