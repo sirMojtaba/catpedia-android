@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,9 +27,10 @@ fun BreedsScreen(
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val listState = rememberLazyListState()
 
     Column(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(modifier = Modifier.padding(4.dp)) {
+        LazyColumn(modifier = Modifier.padding(4.dp), state = listState) {
             itemsIndexed(uiState.breeds) { index, item ->
                 BreedItem(
                     modifier = Modifier
@@ -38,6 +42,16 @@ fun BreedsScreen(
                     breed = item
                 )
             }
+        }
+
+        LaunchedEffect(listState) {
+            snapshotFlow { listState.layoutInfo }
+                .collect { layoutInfo ->
+                    val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()
+                    if (lastVisibleItem != null && lastVisibleItem.index == uiState.breeds.lastIndex) {
+                        viewModel.getBreeds()
+                    }
+                }
         }
     }
 }

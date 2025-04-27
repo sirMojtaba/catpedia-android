@@ -13,7 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.domain.model.Breed
 
@@ -36,7 +38,12 @@ fun BreedItem(modifier: Modifier = Modifier, breed: Breed) {
         Column(
             modifier = Modifier.padding(start = 0.dp)
         ) {
-            Text(modifier = Modifier.padding(4.dp), text = "name: ${breed.name}")
+            Text(
+                modifier = Modifier.padding(4.dp),
+                text = breed.name,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
             Text(modifier = Modifier.padding(4.dp), text = "origin: ${breed.origin}")
             Text(modifier = Modifier.padding(4.dp), text = "temperament: ${breed.temperament}")
         }

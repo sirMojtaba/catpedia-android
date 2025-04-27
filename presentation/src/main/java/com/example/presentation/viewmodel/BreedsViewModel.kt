@@ -6,6 +6,7 @@ import com.example.domain.usecase.GetBreedsUsecase
 import com.example.presentation.model.BreedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -25,13 +26,14 @@ class BreedsViewModel @Inject constructor(
     }
 
     fun getBreeds() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             runCatching {
-                getBreedsUsecase()
+                getBreedsUsecase(page = uiState.value.page)
             }.onSuccess { breeds ->
                 _uiState.update {
                     it.copy(
-                        breeds = breeds.toPersistentList(),
+                        breeds = it.breeds.addAll(breeds),
+                        page = it.page + 1,
                         loading = false,
                         error = null
                     )

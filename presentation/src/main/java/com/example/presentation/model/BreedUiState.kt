@@ -8,6 +8,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Immutable
 data class BreedUiState(
     val breeds: PersistentList<Breed> = persistentListOf(),
+    val page: Int = 0,
     val error: String? = null,
     val loading: Boolean = true
 )
