@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
+
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
 
@@ -13,10 +14,14 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
     NavHost(navController = navController, startDestination = "breeds_screen") {
         composable(route = "breeds_screen") {
-            BreedsScreen()
+            BreedsScreen(
+                onBreedClick = {
+                    navController.navigate(route = "detail_screen")
+                }
+            )
         }
 
-        composable(route = "detail_screen") {
+        composable(route = "detail_screen") { backStackEntry ->
             DetailScreen()
         }
     }

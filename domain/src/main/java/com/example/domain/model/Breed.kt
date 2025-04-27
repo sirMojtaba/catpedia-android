@@ -6,6 +6,7 @@ data class Breed(
     val origin: String,
     val description: String,
     val temperament: String,
+    val lifeSpan: String,
     val wikipediaUrl: String,
     val image: BreedImage,
 )

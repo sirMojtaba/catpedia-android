@@ -22,6 +22,7 @@ hiltComposeVersion = "1.2.0"
 composeNavigation = "2.8.9"
 kotlinxImmutableCollections = "0.3.8"
 coil = "2.7.0"
+kotlinSerializationVersion = "2.0.21"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -56,8 +57,8 @@ androidx-material1 = { group = "androidx.compose.material", name = "material" }
 androidx-material_icons = { group = "androidx.compose.material", name = "material-icons-extended" }
 hilt-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltComposeVersion" }
 androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "composeNavigation" }
-kotlin-immutable-collections = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxImmutableCollections"}
-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil"}
+kotlin-immutable-collections = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxImmutableCollections" }
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 squareup-javapoet = { module = "com.squareup:javapoet", version.ref = "javapoetVersion" }
 
 [plugins]
@@ -67,6 +68,7 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerializationVersion" }
 
 [bundles]
 androidx-compose = [

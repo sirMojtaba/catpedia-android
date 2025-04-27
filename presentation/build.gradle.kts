@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    kotlin("plugin.serialization") version "2.0.21"
     id("kotlin-kapt")
 }
 
@@ -59,6 +60,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.hilt.compose)
     implementation(libs.kotlin.immutable.collections)
+    implementation(libs.androidx.compose.navigation)
 
     //Coil
     implementation(libs.coil)
