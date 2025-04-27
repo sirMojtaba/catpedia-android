@@ -8,6 +8,7 @@ data class BreedDto(
     val name: String? = null,
     val origin: String? = null,
     val description: String? = null,
+    val temperament: String? = null,
     val wikipediaUrl: String? = null,
     val image: BreedImageDto? = null
 )
@@ -18,6 +19,7 @@ fun BreedDto.toDomain(): Breed {
         name = name.orEmpty(),
         origin = origin.orEmpty(),
         description = description.orEmpty(),
+        temperament = temperament.orEmpty(),
         wikipediaUrl = wikipediaUrl.orEmpty(),
         image = image?.toDomain() ?: BreedImage(
             id = image?.id.orEmpty(),
