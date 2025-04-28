@@ -6,7 +6,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
-data class BreedUiState(
+data class BreedsUiState(
     val breeds: PersistentList<Breed> = persistentListOf(),
     val page: Int = 0,
     val error: String? = null,

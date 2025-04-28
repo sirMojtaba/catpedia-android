@@ -3,7 +3,7 @@ package com.example.presentation.screen.breed_list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.GetBreedsUsecase
-import com.example.presentation.model.BreedUiState
+import com.example.presentation.model.BreedsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +17,7 @@ class BreedsViewModel @Inject constructor(
     private val getBreedsUsecase: GetBreedsUsecase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<BreedUiState>(BreedUiState())
+    private val _uiState = MutableStateFlow<BreedsUiState>(BreedsUiState())
     val uiState = _uiState.asStateFlow()
 
     init {

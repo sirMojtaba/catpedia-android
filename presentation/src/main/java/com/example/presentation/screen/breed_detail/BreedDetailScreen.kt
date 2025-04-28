@@ -25,7 +25,7 @@ import coil.compose.AsyncImage
 @Composable
 fun BreedDetailScreen(
     viewModel: BreedDetailViewModel = hiltViewModel(),
-    onUrlClick: () -> Unit
+    onUrlClick: (String) -> Unit
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -50,7 +50,7 @@ fun BreedDetailScreen(
                     modifier = Modifier
                         .padding(4.dp)
                         .clickable {
-                            onUrlClick()
+                            onUrlClick(uiState.wikipediaUrl)
                         },
                     text = buildAnnotatedString {
                         withStyle(

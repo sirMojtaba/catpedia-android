@@ -41,10 +41,8 @@ fun NavController.navigateToBreedDetailScreen(
         )
     )
 
-fun NavGraphBuilder.breedDetailScreen() {
+fun NavGraphBuilder.breedDetailScreen(onUrlClick: (String) -> Unit) {
     composable<BreedDetailRoute> {
-        BreedDetailScreen {
-
-        }
+        BreedDetailScreen(onUrlClick = onUrlClick)
     }
 }

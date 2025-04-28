@@ -2,13 +2,13 @@ package com.example.presentation.screen
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.presentation.screen.breed_detail.BreedDetailScreen
-import com.example.presentation.screen.breed_detail.navigation.navigateToBreedDetailScreen
 import com.example.presentation.screen.breed_detail.navigation.breedDetailScreen
+import com.example.presentation.screen.breed_detail.navigation.navigateToBreedDetailScreen
 import com.example.presentation.screen.breed_list.navigation.BreedsRoute
 import com.example.presentation.screen.breed_list.navigation.breedsScreen
+import com.example.presentation.screen.breed_wikipedia.navigation.breedWikipediaScreen
+import com.example.presentation.screen.breed_wikipedia.navigation.navigateToBreedWikipediaScreen
 
 
 @Composable
@@ -32,14 +32,8 @@ fun CatpediaNavHost() {
             }
         )
 
-        breedDetailScreen()
+        breedDetailScreen(onUrlClick = { navController.navigateToBreedWikipediaScreen(it) })
 
-        composable(route = "detail_screen") { backStackEntry ->
-            BreedDetailScreen(onUrlClick = { navController.navigate("web_screen") })
-        }
-
-        composable(route = "web_screen") {
-            WebScreen(url = "https://en.wikipedia.org/wiki/Abyssinian_(cat)")
-        }
+        breedWikipediaScreen()
     }
 }

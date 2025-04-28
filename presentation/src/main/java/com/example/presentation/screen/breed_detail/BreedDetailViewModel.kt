@@ -15,17 +15,17 @@ class BreedDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val breedArg = savedStateHandle.toRoute<BreedDetailRoute>()
+    val args = savedStateHandle.toRoute<BreedDetailRoute>()
 
     private val _uiState = MutableStateFlow<BreedDetailUiState>(
         BreedDetailUiState(
-            name = breedArg.name,
-            origin = breedArg.origin,
-            description = breedArg.description,
-            temperament = breedArg.temperament,
-            lifeSpan = breedArg.lifeSpan,
-            wikipediaUrl = breedArg.wikipediaUrl,
-            imageUrl = breedArg.imageUrl
+            name = args.name,
+            origin = args.origin,
+            description = args.description,
+            temperament = args.temperament,
+            lifeSpan = args.lifeSpan,
+            wikipediaUrl = args.wikipediaUrl,
+            imageUrl = args.imageUrl
         )
     )
     val uiState = _uiState.asStateFlow()
