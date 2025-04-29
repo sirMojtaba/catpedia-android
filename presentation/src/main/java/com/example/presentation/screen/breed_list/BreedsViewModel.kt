@@ -28,16 +28,25 @@ class BreedsViewModel @Inject constructor(
     }
 
     fun getBreeds() {
+        if (uiState.value.loading) return
+        _uiState.update {
+            it.copy(loading = true)
+        }
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
                 getBreedsUsecase(page = uiState.value.page)
             }.onSuccess { newBreeds ->
-                if (newBreeds.isEmpty()) return@launch
-                val newList = newBreeds.toPersistentList()
+                if (newBreeds.isEmpty()) {
+                    _uiState.update {
+                        it.copy(loading = false)
+                    }
+                    return@launch
+                }
+                val newList = _uiState.value.breeds + newBreeds
                 _uiState.update {
                     it.copy(
-                        breeds = (it.breeds + newList).toPersistentList(),
-                        filteredBreeds = (it.breeds + newList).toPersistentList(),
+                        breeds = newList.toPersistentList(),
+                        filteredBreeds = newList.toPersistentList(),
                         page = it.page + 1,
                         loading = false,
                         error = null

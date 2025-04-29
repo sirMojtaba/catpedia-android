@@ -41,7 +41,7 @@ fun BreedsScreen(
         snapshotFlow { listState.layoutInfo }
             .collect { layoutInfo ->
                 val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()
-                if (lastVisibleItem != null && lastVisibleItem.index == uiState.breeds.lastIndex) {
+                if (lastVisibleItem != null && lastVisibleItem.index >= uiState.breeds.lastIndex && searchQuery.isBlank()) {
                     viewModel.getBreeds()
                 }
             }
@@ -76,14 +76,15 @@ fun BreedsScreen(
 
             //Breeds list
             LazyColumn(modifier = Modifier.padding(4.dp), state = listState) {
-                itemsIndexed(if (searchQuery.isBlank()) uiState.breeds else uiState.filteredBreeds) { index, item ->
+                itemsIndexed(
+                    items = if (searchQuery.isBlank()) uiState.breeds else uiState.filteredBreeds,
+                    key = { _, item -> item.id }
+                ) { index, item ->
                     BreedItem(
                         modifier = Modifier
                             .padding(4.dp)
                             .fillMaxWidth()
-                            .clickable {
-                                onBreedClick(item)
-                            },
+                            .clickable { onBreedClick(item) },
                         breed = item
                     )
                 }

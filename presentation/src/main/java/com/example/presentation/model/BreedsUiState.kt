@@ -11,5 +11,5 @@ data class BreedsUiState(
     val filteredBreeds: PersistentList<Breed> = persistentListOf(),
     val page: Int = 0,
     val error: String? = null,
-    val loading: Boolean = true
+    val loading: Boolean = false
 )
