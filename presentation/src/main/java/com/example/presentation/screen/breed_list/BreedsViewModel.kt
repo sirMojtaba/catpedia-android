@@ -2,9 +2,12 @@ package com.example.presentation.screen.breed_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.model.Breed
 import com.example.domain.usecase.GetBreedsUsecase
 import com.example.presentation.model.BreedsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,10 +31,13 @@ class BreedsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
                 getBreedsUsecase(page = uiState.value.page)
-            }.onSuccess { breeds ->
+            }.onSuccess { newBreeds ->
+                if (newBreeds.isEmpty()) return@launch
+                val newList = newBreeds.toPersistentList()
                 _uiState.update {
                     it.copy(
-                        breeds = it.breeds.addAll(breeds),
+                        breeds = (it.breeds + newList).toPersistentList(),
+                        filteredBreeds = (it.breeds + newList).toPersistentList(),
                         page = it.page + 1,
                         loading = false,
                         error = null
@@ -48,4 +54,16 @@ class BreedsViewModel @Inject constructor(
         }
     }
 
+    fun onSearchQueryChanged(query: String) {
+        val filteredList = if (query.isBlank()) {
+            uiState.value.breeds
+        } else {
+            uiState.value.breeds.filter {
+                it.name.contains(query, ignoreCase = true)
+            }
+        }
+        _uiState.update {
+            it.copy(filteredBreeds = filteredList.toPersistentList())
+        }
+    }
 }
