@@ -92,7 +92,7 @@ fun BreedsScreen(
                     )
                 }
 
-                if (uiState.loading && searchQuery.isBlank()) {
+                if (uiState.loading && uiState.hasMore && searchQuery.isBlank()) {
                     item {
                         Box(
                             modifier = Modifier

@@ -38,7 +38,7 @@ class BreedsViewModel @Inject constructor(
             }.onSuccess { newBreeds ->
                 if (newBreeds.isEmpty()) {
                     _uiState.update {
-                        it.copy(loading = false)
+                        it.copy(loading = false, hasMore = false)
                     }
                     return@launch
                 }
