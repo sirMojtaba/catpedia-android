@@ -2,11 +2,9 @@ package com.example.presentation.screen.breed_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.model.Breed
 import com.example.domain.usecase.GetBreedsUsecase
 import com.example.presentation.model.BreedsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -73,6 +71,12 @@ class BreedsViewModel @Inject constructor(
         }
         _uiState.update {
             it.copy(filteredBreeds = filteredList.toPersistentList())
+        }
+    }
+
+    fun consumeError() {
+        _uiState.update {
+            it.copy(error = null)
         }
     }
 }
