@@ -2,7 +2,9 @@ package com.example.presentation.screen.breed_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.model.Breed
 import com.example.domain.usecase.GetBreedsUsecase
+import com.example.domain.usecase.SetBreedFavoriteUsecase
 import com.example.presentation.model.BreedsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -16,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BreedsViewModel @Inject constructor(
-    private val getBreedsUsecase: GetBreedsUsecase
+    private val getBreedsUsecase: GetBreedsUsecase,
+    private val setBreedFavoriteUsecase: SetBreedFavoriteUsecase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<BreedsUiState>(BreedsUiState())
@@ -97,6 +100,31 @@ class BreedsViewModel @Inject constructor(
                 it.copy(
                     isRefreshing = false
                 )
+            }
+        }
+    }
+
+    fun toggleFavorite(breed: Breed) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val isFavorite = !breed.isFavorite
+            runCatching {
+                setBreedFavoriteUsecase(breed.id, breed.isFavorite)
+            }.onSuccess {
+                val updatedList = _uiState.value.breeds.map {
+                    if (it.id == breed.id) it.copy(isFavorite = isFavorite) else it
+                }
+                _uiState.update {
+                    it.copy(
+                        breeds = updatedList.toPersistentList(),
+                        filteredBreeds = updatedList.toPersistentList()
+                    )
+                }
+            }.onFailure { throwable ->
+                _uiState.update {
+                    it.copy(
+                        error = throwable.message,
+                    )
+                }
             }
         }
     }

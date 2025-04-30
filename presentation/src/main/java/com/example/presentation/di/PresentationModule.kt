@@ -2,6 +2,7 @@ package com.example.presentation.di
 
 import com.example.domain.repository.BreedsRepository
 import com.example.domain.usecase.GetBreedsUsecase
+import com.example.domain.usecase.SetBreedFavoriteUsecase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,4 +17,9 @@ object PresentationModule {
     @Singleton
     fun provideGetBreedsUsecase(repository: BreedsRepository): GetBreedsUsecase =
         GetBreedsUsecase(repository)
+
+    @Provides
+    @Singleton
+    fun provideSetBreedFavorite(repository: BreedsRepository): SetBreedFavoriteUsecase =
+        SetBreedFavoriteUsecase(repository)
 }

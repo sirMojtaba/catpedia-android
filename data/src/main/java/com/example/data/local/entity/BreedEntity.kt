@@ -16,6 +16,7 @@ data class BreedEntity(
     val temperament: String?,
     val lifeSpan: String?,
     val wikipediaUrl: String?,
+    val isFavorite: Boolean = false,
     @Embedded(prefix = "img_")
     val image: BreedImageEntity?
 )
@@ -29,6 +30,7 @@ fun BreedEntity.toDomain(): Breed {
         temperament = temperament.orEmpty(),
         lifeSpan = lifeSpan.orEmpty(),
         wikipediaUrl = wikipediaUrl.orEmpty(),
+        isFavorite = isFavorite,
         image = this@toDomain.image?.toDomain() ?: BreedImage(
             id = this@toDomain.image?.id.orEmpty(),
             url = this@toDomain.image?.url.orEmpty()

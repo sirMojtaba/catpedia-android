@@ -13,6 +13,7 @@ data class BreedDto(
     val temperament: String? = null,
     val life_span: String? = null,
     val wikipedia_url: String? = null,
+    val isFavorite: Boolean = false,
     val image: BreedImageDto? = null
 )
 
@@ -25,6 +26,7 @@ fun BreedDto.toDomain(): Breed {
         temperament = temperament.orEmpty(),
         lifeSpan = life_span.orEmpty(),
         wikipediaUrl = wikipedia_url.orEmpty(),
+        isFavorite = isFavorite,
         image = this@toDomain.image?.toDomain() ?: BreedImage(
             id = this@toDomain.image?.id.orEmpty(),
             url = this@toDomain.image?.url.orEmpty()
@@ -42,6 +44,7 @@ fun BreedDto.toEntity(): BreedEntity {
         temperament = this.temperament,
         lifeSpan = this.life_span,
         wikipediaUrl = this.wikipedia_url,
+        isFavorite = this.isFavorite,
         image = this.image?.toEntity()
     )
 }

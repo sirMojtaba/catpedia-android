@@ -8,5 +8,6 @@ data class Breed(
     val temperament: String,
     val lifeSpan: String,
     val wikipediaUrl: String,
+    val isFavorite: Boolean,
     val image: BreedImage,
 )

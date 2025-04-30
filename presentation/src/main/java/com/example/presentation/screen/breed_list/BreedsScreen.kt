@@ -112,7 +112,9 @@ fun BreedsScreen(
                                 .padding(4.dp)
                                 .fillMaxWidth()
                                 .clickable { onBreedClick(item) },
-                            breed = item
+                            breed = item,
+                            isFavorite = item.isFavorite,
+                            onFavoriteClick = { viewModel.toggleFavorite(item) }
                         )
                     }
 
