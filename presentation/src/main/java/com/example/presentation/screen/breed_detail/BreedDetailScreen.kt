@@ -1,14 +1,22 @@
 package com.example.presentation.screen.breed_detail
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -31,14 +39,31 @@ fun BreedDetailScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier.fillMaxSize()) {
-        AsyncImage(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.5f),
-            model = uiState.imageUrl,
-            contentDescription = null,
-            contentScale = ContentScale.Crop
-        )
+        Box(contentAlignment = Alignment.BottomEnd) {
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.5f),
+                model = uiState.imageUrl,
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
+
+            IconButton(
+                onClick = { viewModel.toggleFavorite(uiState.id, uiState.isFavorite) },
+                modifier = Modifier
+                    .padding(12.dp)
+                    .size(40.dp)
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .size(40.dp),
+                    imageVector = if (uiState.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = "Favorite",
+                    tint = if (uiState.isFavorite) Color.Red else Color.Gray
+                )
+            }
+        }
         Column(modifier = Modifier.padding(8.dp)) {
             Text(modifier = Modifier.padding(4.dp), text = uiState.name, fontSize = 32.sp)
             Text(modifier = Modifier.padding(4.dp), text = uiState.description)

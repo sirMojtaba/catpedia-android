@@ -15,7 +15,8 @@ data class BreedDetailRoute(
     val temperament: String,
     val lifeSpan: String,
     val wikipediaUrl: String,
-    val imageUrl: String
+    val imageUrl: String,
+    val isFavorite: Boolean
 )
 
 fun NavController.navigateToBreedDetailScreen(
@@ -26,7 +27,8 @@ fun NavController.navigateToBreedDetailScreen(
     temperament: String,
     lifeSpan: String,
     wikipediaUrl: String,
-    imageUrl: String
+    imageUrl: String,
+    isFavorite: Boolean
 ) =
     navigate(
         BreedDetailRoute(
@@ -38,6 +40,7 @@ fun NavController.navigateToBreedDetailScreen(
             lifeSpan,
             wikipediaUrl,
             imageUrl,
+            isFavorite
         )
     )
 

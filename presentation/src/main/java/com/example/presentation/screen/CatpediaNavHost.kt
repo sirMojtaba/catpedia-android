@@ -27,7 +27,8 @@ fun CatpediaNavHost() {
                     it.temperament,
                     it.lifeSpan,
                     it.wikipediaUrl,
-                    it.image.url
+                    it.image.url,
+                    it.isFavorite
                 )
             }
         )
