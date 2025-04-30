@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.GetBreedsUsecase
 import com.example.presentation.model.BreedsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,6 +78,26 @@ class BreedsViewModel @Inject constructor(
     fun consumeError() {
         _uiState.update {
             it.copy(error = null)
+        }
+    }
+
+    fun refreshBreeds() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.update {
+                it.copy(
+                    breeds = persistentListOf(),
+                    filteredBreeds = persistentListOf(),
+                    page = 0,
+                    hasMore = true,
+                    isRefreshing = true
+                )
+            }
+            getBreeds()
+            _uiState.update {
+                it.copy(
+                    isRefreshing = false
+                )
+            }
         }
     }
 }

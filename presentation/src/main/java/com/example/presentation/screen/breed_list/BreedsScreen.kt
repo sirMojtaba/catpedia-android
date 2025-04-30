@@ -9,10 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -32,6 +36,7 @@ import com.example.presentation.screen.BreedItem
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BreedsScreen(
     viewModel: BreedsViewModel = hiltViewModel(),
@@ -42,6 +47,10 @@ fun BreedsScreen(
     val listState = rememberLazyListState()
     var searchQuery by remember { mutableStateOf("") }
     val snackbarHostState = remember { SnackbarHostState() }
+    val pullToRefreshState =
+        rememberPullRefreshState(refreshing = uiState.isRefreshing, onRefresh = {
+            viewModel.refreshBreeds()
+        })
 
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo }
@@ -88,33 +97,47 @@ fun BreedsScreen(
             )
 
             //Breeds list
-            LazyColumn(modifier = Modifier.padding(4.dp), state = listState) {
-                itemsIndexed(
-                    items = if (searchQuery.isBlank()) uiState.breeds else uiState.filteredBreeds,
-                    key = { _, item -> item.id }
-                ) { index, item ->
-                    BreedItem(
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .fillMaxWidth()
-                            .clickable { onBreedClick(item) },
-                        breed = item
-                    )
-                }
-
-                if (uiState.isLoading && uiState.hasMore && searchQuery.isBlank()) {
-                    item {
-                        Box(
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .pullRefresh(pullToRefreshState)
+            ) {
+                LazyColumn(modifier = Modifier.padding(4.dp), state = listState) {
+                    itemsIndexed(
+                        items = if (searchQuery.isBlank()) uiState.breeds else uiState.filteredBreeds,
+                        key = { _, item -> item.id }
+                    ) { index, item ->
+                        BreedItem(
                             modifier = Modifier
+                                .padding(4.dp)
                                 .fillMaxWidth()
-                                .padding(16.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator()
+                                .clickable { onBreedClick(item) },
+                            breed = item
+                        )
+                    }
+
+                    if (uiState.isLoading && uiState.hasMore && searchQuery.isBlank()) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
                         }
                     }
                 }
+                PullRefreshIndicator(
+                    refreshing = uiState.isRefreshing,
+                    state = pullToRefreshState,
+                    modifier = Modifier.align(
+                        Alignment.TopCenter
+                    )
+                )
             }
+
 
             Box(modifier = Modifier.fillMaxSize()) {
                 SnackbarHost(

@@ -12,5 +12,6 @@ data class BreedsUiState(
     val page: Int = 0,
     val error: String? = null,
     val isLoading: Boolean = false,
-    val hasMore: Boolean = true
+    val hasMore: Boolean = true,
+    val isRefreshing: Boolean = false
 )
