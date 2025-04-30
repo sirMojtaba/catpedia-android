@@ -1,7 +1,9 @@
-package com.example.data.dto
+package com.example.data.remote.dto
 
+import com.example.data.local.entity.BreedEntity
 import com.example.domain.model.Breed
 import com.example.domain.model.BreedImage
+import java.util.UUID
 
 data class BreedDto(
     val id: String? = null,
@@ -23,11 +25,23 @@ fun BreedDto.toDomain(): Breed {
         temperament = temperament.orEmpty(),
         lifeSpan = life_span.orEmpty(),
         wikipediaUrl = wikipedia_url.orEmpty(),
-        image = image?.toDomain() ?: BreedImage(
-            id = image?.id.orEmpty(),
-            url = image?.url.orEmpty()
+        image = this@toDomain.image?.toDomain() ?: BreedImage(
+            id = this@toDomain.image?.id.orEmpty(),
+            url = this@toDomain.image?.url.orEmpty()
         )
 
     )
 }
 
+fun BreedDto.toEntity(): BreedEntity {
+    return BreedEntity(
+        id = this.id ?: UUID.randomUUID().toString(),
+        name = this.name,
+        origin = this.origin,
+        description = this.description,
+        temperament = this.temperament,
+        lifeSpan = this.life_span,
+        wikipediaUrl = this.wikipedia_url,
+        image = this.image?.toEntity()
+    )
+}

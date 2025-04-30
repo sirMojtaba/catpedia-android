@@ -1,6 +1,6 @@
 package com.example.data.di
 
-import com.example.data.network.apiService.BreedsApiService
+import com.example.data.remote.apiService.BreedsApiService
 import com.example.data.repository.BreedsRepositoryImpl
 import com.example.domain.repository.BreedsRepository
 import dagger.Module

@@ -1,8 +1,8 @@
 package com.example.data.repository
 
-import com.example.data.dto.toDomain
-import com.example.data.network.apiService.BreedsApiService
-import com.example.data.network.constants.NetworkConstants
+import com.example.data.remote.dto.toDomain
+import com.example.data.remote.apiService.BreedsApiService
+import com.example.data.remote.constants.NetworkConstants
 import com.example.domain.model.Breed
 import com.example.domain.repository.BreedsRepository
 import javax.inject.Inject

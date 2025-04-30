@@ -1,7 +1,7 @@
 package com.example.data.di
 
-import com.example.data.network.apiService.BreedsApiService
-import com.example.data.network.constants.NetworkConstants
+import com.example.data.remote.apiService.BreedsApiService
+import com.example.data.remote.constants.NetworkConstants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
