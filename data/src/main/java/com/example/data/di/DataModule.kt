@@ -1,5 +1,6 @@
 package com.example.data.di
 
+import com.example.data.local.dao.BreedDao
 import com.example.data.remote.apiService.BreedsApiService
 import com.example.data.repository.BreedsRepositoryImpl
 import com.example.domain.repository.BreedsRepository
@@ -15,6 +16,6 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideBreedsRepository(apiService: BreedsApiService): BreedsRepository =
-        BreedsRepositoryImpl(apiService)
+    fun provideBreedsRepository(apiService: BreedsApiService, dao: BreedDao): BreedsRepository =
+        BreedsRepositoryImpl(apiService, dao)
 }
