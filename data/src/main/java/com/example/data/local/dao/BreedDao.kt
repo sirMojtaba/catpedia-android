@@ -17,4 +17,7 @@ interface BreedDao {
     @Query("UPDATE breeds SET isFavorite = :isFavorite WHERE id = :breedId")
     suspend fun updateFavorite(breedId: String, isFavorite: Boolean)
 
+    @Query("SELECT id FROM breeds WHERE isFavorite= 1")
+    suspend fun getAllFavorites(): List<String>
+
 }

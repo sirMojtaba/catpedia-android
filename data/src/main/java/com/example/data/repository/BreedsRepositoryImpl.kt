@@ -16,10 +16,15 @@ class BreedsRepositoryImpl @Inject constructor(
 
     override suspend fun getBreeds(page: Int): List<Breed> {
         return try {
+            val localFavorites = dao.getAllFavorites()
             val remoteResponse =
                 api.getBreeds(NetworkConstants.API_KEY, limit = NetworkConstants.LIMIT, page = page)
+            val entities = remoteResponse.map {
+                val isFavorite = localFavorites.contains(it.id)
+                it.toEntity().copy(isFavorite = isFavorite)
+            }
             if (remoteResponse.isNotEmpty()) {
-                dao.insertAll(remoteResponse.map { it.toEntity() })
+                dao.insertAll(entities)
             }
             dao.getAllBreeds().map {
                 it.toDomain()

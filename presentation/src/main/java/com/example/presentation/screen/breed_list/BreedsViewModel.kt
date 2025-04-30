@@ -108,7 +108,7 @@ class BreedsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val isFavorite = !breed.isFavorite
             runCatching {
-                setBreedFavoriteUsecase(breed.id, breed.isFavorite)
+                setBreedFavoriteUsecase(breed.id, isFavorite)
             }.onSuccess {
                 val updatedList = _uiState.value.breeds.map {
                     if (it.id == breed.id) it.copy(isFavorite = isFavorite) else it
