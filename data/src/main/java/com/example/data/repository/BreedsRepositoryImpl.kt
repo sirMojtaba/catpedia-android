@@ -15,13 +15,17 @@ class BreedsRepositoryImpl @Inject constructor(
 ) : BreedsRepository {
 
     override suspend fun getBreeds(page: Int): List<Breed> {
-        val remoteResponse =
-            api.getBreeds(NetworkConstants.API_KEY, limit = NetworkConstants.LIMIT, page = page)
-        if (remoteResponse.isNotEmpty()) {
-            dao.insertAll(remoteResponse.map { it.toEntity() })
-        }
-        return dao.getAllBreeds().map {
-            it.toDomain()
+        return try {
+            val remoteResponse =
+                api.getBreeds(NetworkConstants.API_KEY, limit = NetworkConstants.LIMIT, page = page)
+            if (remoteResponse.isNotEmpty()) {
+                dao.insertAll(remoteResponse.map { it.toEntity() })
+            }
+            dao.getAllBreeds().map {
+                it.toDomain()
+            }
+        } catch (e: Exception) {
+            dao.getAllBreeds().map { it.toDomain() }
         }
     }
 }
