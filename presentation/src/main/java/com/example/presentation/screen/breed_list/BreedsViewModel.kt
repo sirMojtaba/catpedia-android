@@ -12,6 +12,7 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,37 +32,39 @@ class BreedsViewModel @Inject constructor(
 
     fun getBreeds() {
         if (uiState.value.isLoading) return
+
         _uiState.update {
             it.copy(isLoading = true)
         }
+
         viewModelScope.launch(Dispatchers.IO) {
-            runCatching {
-                getBreedsUsecase(page = uiState.value.page)
-            }.onSuccess { newBreeds ->
-                if (newBreeds.isEmpty()) {
+            getBreedsUsecase(page = uiState.value.page)
+                .catch { throwable ->
                     _uiState.update {
-                        it.copy(isLoading = false, hasMore = false)
+                        it.copy(
+                            error = throwable.message,
+                            isLoading = false
+                        )
                     }
-                    return@launch
                 }
-                val newList = (_uiState.value.breeds + newBreeds).distinctBy{ it.id }
-                _uiState.update {
-                    it.copy(
-                        breeds = newList.toPersistentList(),
-                        filteredBreeds = newList.toPersistentList(),
-                        page = it.page + 1,
-                        isLoading = false,
-                        error = null
-                    )
+                .collect { newBreeds ->
+                    if (newBreeds.isEmpty()) {
+                        _uiState.update {
+                            it.copy(isLoading = false, hasMore = false)
+                        }
+                        return@collect
+                    }
+                    val newList = (_uiState.value.breeds + newBreeds).distinctBy { it.id }
+                    _uiState.update {
+                        it.copy(
+                            breeds = newList.toPersistentList(),
+                            filteredBreeds = newList.toPersistentList(),
+                            page = it.page + 1,
+                            isLoading = false,
+                            error = null
+                        )
+                    }
                 }
-            }.onFailure { throwable ->
-                _uiState.update {
-                    it.copy(
-                        error = throwable.message,
-                        isLoading = false
-                    )
-                }
-            }
         }
     }
 

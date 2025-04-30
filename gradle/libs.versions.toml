@@ -24,6 +24,7 @@ kotlinxImmutableCollections = "0.3.8"
 coil = "2.7.0"
 kotlinSerializationVersion = "1.8.1"
 roomVersion = "2.7.1"
+coroutinesVersion = "1.8.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -65,6 +66,7 @@ kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-seria
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomVersion" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomVersion" }
+kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutinesVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

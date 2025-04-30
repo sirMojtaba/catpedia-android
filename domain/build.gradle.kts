@@ -16,4 +16,5 @@ kotlin {
 dependencies {
     //Kotlin
     implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.coroutines)
 }

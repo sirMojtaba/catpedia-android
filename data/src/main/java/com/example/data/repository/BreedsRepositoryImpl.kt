@@ -7,6 +7,11 @@ import com.example.data.remote.constants.NetworkConstants
 import com.example.data.remote.dto.toEntity
 import com.example.domain.model.Breed
 import com.example.domain.repository.BreedsRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class BreedsRepositoryImpl @Inject constructor(
@@ -14,25 +19,33 @@ class BreedsRepositoryImpl @Inject constructor(
     private val dao: BreedDao
 ) : BreedsRepository {
 
-    override suspend fun getBreeds(page: Int): List<Breed> {
-        return try {
-            val localFavorites = dao.getAllFavorites()
-            val remoteResponse =
-                api.getBreeds(NetworkConstants.API_KEY, limit = NetworkConstants.LIMIT, page = page)
-            val entities = remoteResponse.map {
-                val isFavorite = localFavorites.contains(it.id)
-                it.toEntity().copy(isFavorite = isFavorite)
+    override fun getBreeds(page: Int): Flow<List<Breed>> = flow {
+        try {
+            val localFavorites = dao.getAllFavorites().first()
+
+            val remoteResponse = api.getBreeds(
+                NetworkConstants.API_KEY,
+                limit = NetworkConstants.LIMIT,
+                page = page
+            )
+
+            val entities = remoteResponse.map { dto ->
+                val isFavorite = localFavorites.contains(dto.id)
+                dto.toEntity().copy(isFavorite = isFavorite)
             }
+
             if (remoteResponse.isNotEmpty()) {
                 dao.insertAll(entities)
             }
-            dao.getAllBreeds().map {
-                it.toDomain()
-            }
         } catch (e: Exception) {
-            dao.getAllBreeds().map { it.toDomain() }
+            emitAll(dao.getAllBreeds().map { list -> list.map { it.toDomain() } })
+            return@flow
         }
+        
+        emitAll(dao.getAllBreeds().map { list -> list.map { it.toDomain() } })
     }
+
+
 
     override suspend fun toggleFavorite(breedId: String, isFavorite: Boolean) {
         dao.updateFavorite(breedId, isFavorite)

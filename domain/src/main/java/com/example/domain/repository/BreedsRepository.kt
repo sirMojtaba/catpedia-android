@@ -1,9 +1,10 @@
 package com.example.domain.repository
 
 import com.example.domain.model.Breed
+import kotlinx.coroutines.flow.Flow
 
 interface BreedsRepository {
 
-    suspend fun getBreeds(page: Int): List<Breed>
+    fun getBreeds(page: Int): Flow<List<Breed>>
     suspend fun toggleFavorite(breedId: String, isFavorite: Boolean)
 }
