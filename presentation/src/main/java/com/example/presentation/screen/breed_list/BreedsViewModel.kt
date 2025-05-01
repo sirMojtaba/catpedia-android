@@ -54,11 +54,10 @@ class BreedsViewModel @Inject constructor(
                         }
                         return@collect
                     }
-                    val newList = (_uiState.value.breeds + newBreeds).distinctBy { it.id }
                     _uiState.update {
+                        val newList = (it.breeds + newBreeds).distinctBy { it.id }
                         it.copy(
                             breeds = newList.toPersistentList(),
-                            filteredBreeds = newList.toPersistentList(),
                             page = it.page + 1,
                             isLoading = false,
                             error = null
