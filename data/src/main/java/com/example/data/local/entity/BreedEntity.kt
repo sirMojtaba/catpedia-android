@@ -1,10 +1,8 @@
 package com.example.data.local.entity
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.domain.model.Breed
-import com.example.domain.model.BreedImage
 
 @Entity(tableName = "breeds")
 data class BreedEntity(
@@ -17,8 +15,7 @@ data class BreedEntity(
     val lifeSpan: String?,
     val wikipediaUrl: String?,
     val isFavorite: Boolean = false,
-    @Embedded(prefix = "img_")
-    val image: BreedImageEntity?
+    val imageUrl: String?
 )
 
 fun BreedEntity.toDomain(): Breed {
@@ -31,9 +28,6 @@ fun BreedEntity.toDomain(): Breed {
         lifeSpan = lifeSpan.orEmpty(),
         wikipediaUrl = wikipediaUrl.orEmpty(),
         isFavorite = isFavorite,
-        image = this@toDomain.image?.toDomain() ?: BreedImage(
-            id = this@toDomain.image?.id.orEmpty(),
-            url = this@toDomain.image?.url.orEmpty()
-        )
+        imageUrl = imageUrl.orEmpty()
     )
 }

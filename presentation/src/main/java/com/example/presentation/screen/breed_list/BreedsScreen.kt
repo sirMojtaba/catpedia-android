@@ -32,8 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.domain.model.Breed
-import com.example.presentation.screen.BreedItem
+import com.example.presentation.screen.breed_list.component.BreedItem
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 
@@ -41,7 +40,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Composable
 fun BreedsScreen(
     viewModel: BreedsViewModel = hiltViewModel(),
-    onBreedClick: (Breed) -> Unit
+    onBreedClick: (String) -> Unit
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -112,7 +111,7 @@ fun BreedsScreen(
                             modifier = Modifier
                                 .padding(4.dp)
                                 .fillMaxWidth()
-                                .clickable { onBreedClick(item) },
+                                .clickable { onBreedClick(item.id) },
                             breed = item,
                             isFavorite = item.isFavorite,
                             onFavoriteClick = { viewModel.toggleFavorite(item) }
@@ -140,7 +139,6 @@ fun BreedsScreen(
                     )
                 )
             }
-
 
             Box(modifier = Modifier.fillMaxSize()) {
                 SnackbarHost(

@@ -1,4 +1,4 @@
-package com.example.presentation.model
+package com.example.presentation.screen.breed_list.model
 
 import androidx.compose.runtime.Immutable
 import com.example.domain.model.Breed

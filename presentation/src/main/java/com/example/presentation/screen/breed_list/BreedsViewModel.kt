@@ -6,7 +6,7 @@ import com.example.domain.model.Breed
 import com.example.domain.usecase.GetBreedsUsecase
 import com.example.domain.usecase.SetBreedFavoriteUsecase
 import com.example.domain.usecase.SyncBreedsUsecase
-import com.example.presentation.model.BreedsUiState
+import com.example.presentation.screen.breed_list.model.BreedsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -66,7 +66,6 @@ class BreedsViewModel @Inject constructor(
                         breeds = newBreeds.toPersistentList(),
 //                        page = it.page + 1,
                         isLoading = false,
-                        error = null
                     )
                 }
             }

@@ -3,7 +3,7 @@ package com.example.presentation.screen.breed_wikipedia
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.navigation.toRoute
-import com.example.presentation.model.BreedWikipediaUiState
+import com.example.presentation.screen.breed_wikipedia.model.BreedWikipediaUiState
 import com.example.presentation.screen.breed_wikipedia.navigation.BreedWikipediaRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

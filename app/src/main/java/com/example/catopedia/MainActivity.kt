@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.catopedia.ui.theme.CatpediaTheme
-import com.example.presentation.screen.CatpediaNavHost
+import com.example.catopedia.navigation.CatpediaNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 

@@ -1,4 +1,4 @@
-package com.example.presentation.screen
+package com.example.presentation.screen.breed_list.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -43,7 +43,7 @@ fun BreedItem(
             modifier = Modifier
                 .size(100.dp)
                 .clip(RoundedCornerShape(8.dp)),
-            model = breed.image.url,
+            model = breed.imageUrl,
             contentDescription = null,
             contentScale = ContentScale.Crop
         )

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.domain.usecase.SetBreedFavoriteUsecase
-import com.example.presentation.model.BreedDetailUiState
+import com.example.presentation.screen.breed_detail.model.BreedDetailUiState
 import com.example.presentation.screen.breed_detail.navigation.BreedDetailRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,19 +23,8 @@ class BreedDetailViewModel @Inject constructor(
 
     val args = savedStateHandle.toRoute<BreedDetailRoute>()
 
-    private val _uiState = MutableStateFlow<BreedDetailUiState>(
-        BreedDetailUiState(
-            id = args.id,
-            name = args.name,
-            origin = args.origin,
-            description = args.description,
-            temperament = args.temperament,
-            lifeSpan = args.lifeSpan,
-            wikipediaUrl = args.wikipediaUrl,
-            imageUrl = args.imageUrl,
-            isFavorite = args.isFavorite
-        )
-    )
+    private val _uiState =
+        MutableStateFlow<BreedDetailUiState>(BreedDetailUiState(id = args.breedId))
     val uiState = _uiState.asStateFlow()
 
     fun toggleFavorite(breedId: String, isFavorite: Boolean) {

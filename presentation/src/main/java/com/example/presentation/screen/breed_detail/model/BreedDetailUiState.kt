@@ -1,4 +1,4 @@
-package com.example.presentation.model
+package com.example.presentation.screen.breed_detail.model
 
 data class BreedDetailUiState(
     val id: String = "",
@@ -9,6 +9,6 @@ data class BreedDetailUiState(
     val lifeSpan: String = "",
     val wikipediaUrl: String = "",
     val imageUrl: String = "",
-    val isFavorite: Boolean,
+    val isFavorite: Boolean = false,
     val error: String = ""
 )

@@ -1,4 +1,4 @@
-package com.example.presentation.screen
+package com.example.catopedia.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -18,18 +18,8 @@ fun CatpediaNavHost() {
 
     NavHost(navController = navController, startDestination = BreedsRoute) {
         breedsScreen(
-            onBreedClick = {
-                navController.navigateToBreedDetailScreen(
-                    it.id,
-                    it.name,
-                    it.origin,
-                    it.description,
-                    it.temperament,
-                    it.lifeSpan,
-                    it.wikipediaUrl,
-                    it.image.url,
-                    it.isFavorite
-                )
+            onBreedClick = { breedId ->
+                navController.navigateToBreedDetailScreen(breedId)
             }
         )
 

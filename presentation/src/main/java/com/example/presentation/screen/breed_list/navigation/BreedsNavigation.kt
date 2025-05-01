@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object BreedsRoute
 
-fun NavGraphBuilder.breedsScreen(onBreedClick: (Breed) -> Unit) {
+fun NavGraphBuilder.breedsScreen(onBreedClick: (String) -> Unit) {
     composable<BreedsRoute> {
         BreedsScreen(onBreedClick = onBreedClick)
     }

@@ -1,8 +1,7 @@
 package com.example.data.remote.dto
 
 import com.example.data.local.entity.BreedEntity
-import com.example.domain.model.Breed
-import com.example.domain.model.BreedImage
+import com.google.gson.annotations.SerializedName
 import java.util.UUID
 
 data class BreedDto(
@@ -11,40 +10,24 @@ data class BreedDto(
     val origin: String? = null,
     val description: String? = null,
     val temperament: String? = null,
-    val life_span: String? = null,
-    val wikipedia_url: String? = null,
+    @SerializedName("life_span")
+    val lifeSpan: String? = null,
+    @SerializedName("wikipedia_url")
+    val wikipediaUrl: String? = null,
     val isFavorite: Boolean = false,
     val image: BreedImageDto? = null
 )
 
-fun BreedDto.toDomain(): Breed {
-    return Breed(
-        id = id.orEmpty(),
-        name = name.orEmpty(),
-        origin = origin.orEmpty(),
-        description = description.orEmpty(),
-        temperament = temperament.orEmpty(),
-        lifeSpan = life_span.orEmpty(),
-        wikipediaUrl = wikipedia_url.orEmpty(),
-        isFavorite = isFavorite,
-        image = this@toDomain.image?.toDomain() ?: BreedImage(
-            id = this@toDomain.image?.id.orEmpty(),
-            url = this@toDomain.image?.url.orEmpty()
-        )
-
-    )
-}
-
 fun BreedDto.toEntity(): BreedEntity {
     return BreedEntity(
-        id = this.id ?: UUID.randomUUID().toString(),
-        name = this.name,
-        origin = this.origin,
-        description = this.description,
-        temperament = this.temperament,
-        lifeSpan = this.life_span,
-        wikipediaUrl = this.wikipedia_url,
-        isFavorite = this.isFavorite,
-        image = this.image?.toEntity()
+        id = id ?: UUID.randomUUID().toString(),
+        name = name,
+        origin = origin,
+        description = description,
+        temperament = temperament,
+        lifeSpan = lifeSpan,
+        wikipediaUrl = wikipediaUrl,
+        isFavorite = isFavorite,
+        imageUrl = image?.url
     )
 }

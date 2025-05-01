@@ -14,7 +14,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
 fun BreedWikipediaScreen(
-    modifier: Modifier = Modifier,
     viewModel: BreedWikipediaViewModel = hiltViewModel()
 ) {
 

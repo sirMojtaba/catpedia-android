@@ -9,5 +9,5 @@ data class Breed(
     val lifeSpan: String,
     val wikipediaUrl: String,
     val isFavorite: Boolean,
-    val image: BreedImage,
+    val imageUrl: String,
 )

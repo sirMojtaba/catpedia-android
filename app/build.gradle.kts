@@ -51,11 +51,15 @@ dependencies {
     //Project layer dependencies
     implementation(project(":presentation"))
     implementation(project(":data"))
+    implementation(project(":domain"))
 
     //Hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.compiler)
     kapt(libs.hilt.compiler)
+
+    //Compose
+    implementation(libs.androidx.compose.navigation)
 
     implementation(libs.squareup.javapoet)
     kapt(libs.squareup.javapoet)
