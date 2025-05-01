@@ -52,7 +52,7 @@ fun BreedsRoute(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                is BreedsUiEvent.Navigation.DetailScreen -> onBreedClick(uiEvent.breedId)
+                is BreedsUiEvent.Navigation.DetailScreen -> {}
                 is BreedsUiEvent.UiMessage -> {
                     uiEvent.message.let { errorMessage ->
                         snackbarHostState.showSnackbar(errorMessage)
@@ -69,6 +69,7 @@ fun BreedsRoute(
         breeds = uiState.breeds,
         filteredBreeds = uiState.filteredBreeds,
         snackbarHostState = snackbarHostState,
+        onBreedClick = { onBreedClick(it) },
         onAction = viewModel::onAction
     )
 }
@@ -82,6 +83,7 @@ private fun BreedsScreen(
     breeds: PersistentList<Breed>,
     filteredBreeds: PersistentList<Breed>,
     snackbarHostState: SnackbarHostState,
+    onBreedClick: (String) -> Unit,
     onAction: (BreedsUiAction) -> Unit
 ) {
 
@@ -96,7 +98,7 @@ private fun BreedsScreen(
         snapshotFlow { listState.layoutInfo }
             .collect { layoutInfo ->
                 val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()
-                if (lastVisibleItem != null && lastVisibleItem.index >= breeds.lastIndex && searchQuery.isBlank()) {
+                if (lastVisibleItem != null && breeds.lastIndex != -1 && lastVisibleItem.index >= breeds.lastIndex && searchQuery.isBlank()) {
                     onAction(BreedsUiAction.LoadMore)
                 }
             }
@@ -144,7 +146,7 @@ private fun BreedsScreen(
                             modifier = Modifier
                                 .padding(4.dp)
                                 .fillMaxWidth()
-                                .clickable { onAction(BreedsUiAction.Navigation.DetailScreen(item.id)) },
+                                .clickable { onBreedClick(item.id) },
                             breed = item,
                             isFavorite = item.isFavorite,
                             onFavoriteClick = { onAction(BreedsUiAction.ToggleFavorite(item.id)) }
