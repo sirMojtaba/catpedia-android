@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 class GetBreedsUsecase(private val repository: BreedsRepository) {
 
-    operator fun invoke(page: Int): Flow<List<Breed>> = repository.getBreeds(page = page)
+    operator fun invoke(): Flow<List<Breed>> = repository.getBreeds()
 }

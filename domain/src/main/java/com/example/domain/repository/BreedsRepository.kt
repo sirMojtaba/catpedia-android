@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface BreedsRepository {
 
-    fun getBreeds(page: Int): Flow<List<Breed>>
+    fun getBreeds(): Flow<List<Breed>>
     suspend fun toggleFavorite(breedId: String, isFavorite: Boolean)
+    suspend fun syncBreeds(page: Int)
 }

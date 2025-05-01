@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Breed
 import com.example.domain.usecase.GetBreedsUsecase
 import com.example.domain.usecase.SetBreedFavoriteUsecase
+import com.example.domain.usecase.SyncBreedsUsecase
 import com.example.presentation.model.BreedsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -12,13 +13,13 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class BreedsViewModel @Inject constructor(
+    private val syncBreedsUsecase: SyncBreedsUsecase,
     private val getBreedsUsecase: GetBreedsUsecase,
     private val setBreedFavoriteUsecase: SetBreedFavoriteUsecase
 ) : ViewModel() {
@@ -27,43 +28,48 @@ class BreedsViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     init {
+        syncBreeds()
         getBreeds()
     }
 
-    fun getBreeds() {
+    fun syncBreeds() {
         if (uiState.value.isLoading) return
-
         _uiState.update {
             it.copy(isLoading = true)
         }
-
         viewModelScope.launch(Dispatchers.IO) {
-            getBreedsUsecase(page = uiState.value.page)
-                .catch { throwable ->
-                    _uiState.update {
-                        it.copy(
-                            error = throwable.message,
-                            isLoading = false
-                        )
-                    }
+            runCatching {
+                syncBreedsUsecase(page = uiState.value.page)
+            }.onSuccess {
+                _uiState.update {
+                    it.copy(page = it.page + 1, isLoading = false)
                 }
-                .collect { newBreeds ->
-                    if (newBreeds.isEmpty()) {
-                        _uiState.update {
-                            it.copy(isLoading = false, hasMore = false)
-                        }
-                        return@collect
-                    }
-                    _uiState.update {
-                        val newList = (it.breeds + newBreeds).distinctBy { it.id }
-                        it.copy(
-                            breeds = newList.toPersistentList(),
-                            page = it.page + 1,
-                            isLoading = false,
-                            error = null
-                        )
-                    }
+            }.onFailure { throwable ->
+                _uiState.update {
+                    it.copy(error = throwable.message, isLoading = false)
                 }
+            }
+        }
+    }
+
+    fun getBreeds() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getBreedsUsecase().collect { newBreeds ->
+//                if (newBreeds.isEmpty()) {
+//                    _uiState.update {
+//                        it.copy(isLoading = false, hasMore = false)
+//                    }
+//                    return@collect
+//                }
+                _uiState.update {
+                    it.copy(
+                        breeds = newBreeds.toPersistentList(),
+//                        page = it.page + 1,
+                        isLoading = false,
+                        error = null
+                    )
+                }
+            }
         }
     }
 
@@ -97,7 +103,7 @@ class BreedsViewModel @Inject constructor(
                     isRefreshing = true
                 )
             }
-            getBreeds()
+            syncBreeds()
             _uiState.update {
                 it.copy(
                     isRefreshing = false

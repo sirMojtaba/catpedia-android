@@ -58,7 +58,7 @@ fun BreedsScreen(
             .collect { layoutInfo ->
                 val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()
                 if (lastVisibleItem != null && lastVisibleItem.index >= uiState.breeds.lastIndex && searchQuery.isBlank()) {
-                    viewModel.getBreeds()
+                    viewModel.syncBreeds()
                 }
             }
     }

@@ -8,9 +8,7 @@ import com.example.data.remote.dto.toEntity
 import com.example.domain.model.Breed
 import com.example.domain.repository.BreedsRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -19,32 +17,27 @@ class BreedsRepositoryImpl @Inject constructor(
     private val dao: BreedDao
 ) : BreedsRepository {
 
-    override fun getBreeds(page: Int): Flow<List<Breed>> = flow {
-        try {
-            val localFavorites = dao.getAllFavorites().first()
+    override fun getBreeds(): Flow<List<Breed>> =
+        dao.getAllBreeds().map { list -> list.map { it.toDomain() } }
 
-            val remoteResponse = api.getBreeds(
-                NetworkConstants.API_KEY,
-                limit = NetworkConstants.LIMIT,
-                page = page
-            )
 
-            val entities = remoteResponse.map { dto ->
-                val isFavorite = localFavorites.contains(dto.id)
-                dto.toEntity().copy(isFavorite = isFavorite)
-            }
-
-            if (remoteResponse.isNotEmpty()) {
-                dao.insertAll(entities)
-            }
-        } catch (e: Exception) {
-            emitAll(dao.getAllBreeds().map { list -> list.map { it.toDomain() } })
-            return@flow
+    override suspend fun syncBreeds(page: Int) {
+        val localFavorites = dao.getAllFavorites().first()
+        val remoteResponse = api.getBreeds(
+            NetworkConstants.API_KEY,
+            limit = NetworkConstants.LIMIT,
+            page = page
+        )
+        val entities = remoteResponse.map { dto ->
+            val isFavorite = localFavorites.contains(dto.id)
+            dto.toEntity().copy(isFavorite = isFavorite)
         }
-        
-        emitAll(dao.getAllBreeds().map { list -> list.map { it.toDomain() } })
+        if (remoteResponse.isNotEmpty()) {
+            dao.insertAll(entities)
+        } else {
+            throw Exception("The list is empty!")
+        }
     }
-
 
 
     override suspend fun toggleFavorite(breedId: String, isFavorite: Boolean) {
