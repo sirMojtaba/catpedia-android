@@ -24,9 +24,13 @@ Catpedia is an Android application built using **Jetpack Compose**, **Clean arch
 - **Material 3** UI components
 
 ## 📸 Screenshots
-![Screenshot_20250501_232548_Catopedia](https://github.com/user-attachments/assets/43a46391-c2ea-45ef-8db3-59683f815702)
-![Screenshot_20250501_232646_Catopedia](https://github.com/user-attachments/assets/d5690d78-48fb-464b-8be7-c9c06b400308)
-![Screenshot_20250501_232617_Catopedia](https://github.com/user-attachments/assets/2d713539-a71c-428c-b1bc-6fc7d354cfb1)
+
+<p float="left">
+  <img src="https://github.com/user-attachments/assets/43a46391-c2ea-45ef-8db3-59683f815702" width="250"/>
+  <img src="https://github.com/user-attachments/assets/d5690d78-48fb-464b-8be7-c9c06b400308" width="250"/>
+  <img src="https://github.com/user-attachments/assets/2d713539-a71c-428c-b1bc-6fc7d354cfb1" width="250"/>
+</p>
+
 
 
 
