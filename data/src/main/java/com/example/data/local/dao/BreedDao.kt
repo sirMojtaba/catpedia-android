@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.example.data.local.entity.BreedEntity
+import com.example.domain.model.Breed
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -14,6 +15,9 @@ interface BreedDao {
 
     @Query("SELECT * FROM breeds")
     fun getAllBreeds(): Flow<List<BreedEntity>>
+
+    @Query("SELECT * FROM breeds WHERE id = :breedId")
+    fun getBreed(breedId: String): Flow<Breed>
 
     @Query("UPDATE breeds SET isFavorite = :isFavorite WHERE id = :breedId")
     suspend fun updateFavorite(breedId: String, isFavorite: Boolean)

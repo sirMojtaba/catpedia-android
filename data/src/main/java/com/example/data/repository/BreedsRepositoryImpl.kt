@@ -20,6 +20,8 @@ class BreedsRepositoryImpl @Inject constructor(
     override fun getBreeds(): Flow<List<Breed>> =
         dao.getAllBreeds().map { list -> list.map { it.toDomain() } }
 
+    override fun getBreed(breedId: String): Flow<Breed> = dao.getBreed(breedId)
+
 
     override suspend fun syncBreeds(page: Int) {
         val localFavorites = dao.getAllFavorites().first()

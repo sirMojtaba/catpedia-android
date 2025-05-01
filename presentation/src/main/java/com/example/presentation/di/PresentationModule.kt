@@ -1,6 +1,7 @@
 package com.example.presentation.di
 
 import com.example.domain.repository.BreedsRepository
+import com.example.domain.usecase.GetBreedUsecase
 import com.example.domain.usecase.GetBreedsUsecase
 import com.example.domain.usecase.SetBreedFavoriteUsecase
 import com.example.domain.usecase.SyncBreedsUsecase
@@ -18,6 +19,11 @@ object PresentationModule {
     @Singleton
     fun provideGetBreedsUsecase(repository: BreedsRepository): GetBreedsUsecase =
         GetBreedsUsecase(repository)
+
+    @Provides
+    @Singleton
+    fun provideGetBreedUsecase(repository: BreedsRepository): GetBreedUsecase =
+        GetBreedUsecase(repository)
 
     @Provides
     @Singleton
