@@ -1,4 +1,4 @@
-# 🐱 Catopedia
+# 🐱 Catpedia
 
 Catpedia is an Android application built using **Jetpack Compose**, **Clean architecture**, and modern Android development libraries. It allows users to browse various cat breeds, search among them, and mark their favorites.
 
@@ -56,13 +56,22 @@ Catpedia is an Android application built using **Jetpack Compose**, **Clean arch
 
 4.Run the app on your emulator or connected device.
 
-📂 Project Structure
+## 📂 Project Structure
 
-Catopedia/
-├── data/                      # Network & database layer
-├── domain/                    # Use cases and models
-├── presenetation/             # Compose screens and UI logic
-├── ...
+```text
+Catpedia
+├── app                     # App-level logic and navigation
+├── data                    # Data layer: handles local & remote sources
+│   ├── remote              # Retrofit services, DTOs
+│   └── local               # Room database, DAOs
+├── domain                  # Business logic layer
+│   ├── usecase             # Use cases
+│   └── model               # Domain models
+├── presentation            # UI layer using Jetpack Compose
+│   ├── screens             # Individual screens
+│   └── components          # Reusable UI components
+```
 
-🤝 Contributing
+## 🤝 Contributing
+
 Contributions, issues and feature requests are welcome! Feel free to fork the repo and submit a pull request.
