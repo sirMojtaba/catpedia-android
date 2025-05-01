@@ -3,7 +3,7 @@ package com.example.data.repository
 import com.example.data.local.dao.BreedDao
 import com.example.data.local.entity.toDomain
 import com.example.data.remote.apiService.BreedsApiService
-import com.example.data.remote.constants.NetworkConstants
+import com.example.data.remote.util.NetworkConstants
 import com.example.data.remote.dto.toEntity
 import com.example.domain.model.Breed
 import com.example.domain.repository.BreedsRepository
@@ -26,7 +26,6 @@ class BreedsRepositoryImpl @Inject constructor(
     override suspend fun syncBreeds(page: Int) {
         val localFavorites = dao.getAllFavorites().first()
         val remoteResponse = api.getBreeds(
-            NetworkConstants.API_KEY,
             limit = NetworkConstants.LIMIT,
             page = page
         )

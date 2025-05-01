@@ -19,10 +19,10 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            "breeds_database"
-        ).build()
+                context,
+                AppDatabase::class.java,
+                "breeds_database"
+            ).fallbackToDestructiveMigration(true).build()
     }
 
     @Provides
