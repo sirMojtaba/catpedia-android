@@ -103,10 +103,30 @@ fun BreedDetailScreen(
         }
         Column(modifier = Modifier.padding(8.dp)) {
             Text(modifier = Modifier.padding(4.dp), text = name, fontSize = 32.sp)
-            Text(modifier = Modifier.padding(4.dp), text = description)
-            Text(modifier = Modifier.padding(4.dp), text = "origin: $origin")
-            Text(modifier = Modifier.padding(4.dp), text = "temperament: $temperament")
-            Text(modifier = Modifier.padding(4.dp), text = "life span: $lifeSpan")
+            Text(
+                modifier = Modifier.padding(4.dp),
+                text = description,
+                fontSize = 14.sp,
+                lineHeight = 16.sp
+            )
+            Text(
+                modifier = Modifier.padding(4.dp),
+                text = "origin: $origin",
+                fontSize = 14.sp,
+                lineHeight = 16.sp
+            )
+            Text(
+                modifier = Modifier.padding(4.dp),
+                text = "temperament: $temperament",
+                fontSize = 14.sp,
+                lineHeight = 16.sp
+            )
+            Text(
+                modifier = Modifier.padding(4.dp),
+                text = "life span: $lifeSpan",
+                fontSize = 14.sp,
+                lineHeight = 16.sp
+            )
             if (wikipediaUrl.isNotBlank()) {
                 Text(
                     modifier = Modifier
