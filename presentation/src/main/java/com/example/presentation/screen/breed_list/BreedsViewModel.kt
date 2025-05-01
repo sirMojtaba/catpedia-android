@@ -5,13 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.GetBreedsUsecase
 import com.example.domain.usecase.SetBreedFavoriteUsecase
 import com.example.domain.usecase.SyncBreedsUsecase
-import com.example.presentation.screen.breed_list.model.BreedUiAction
+import com.example.presentation.screen.breed_list.model.BreedsUiAction
+import com.example.presentation.screen.breed_list.model.BreedsUiEvent
 import com.example.presentation.screen.breed_list.model.BreedsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.map
@@ -29,22 +32,26 @@ class BreedsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<BreedsUiState>(BreedsUiState())
     val uiState = _uiState.asStateFlow()
 
+    private val _uiEvent = MutableSharedFlow<BreedsUiEvent>()
+    val uiEvent = _uiEvent.asSharedFlow()
+
     init {
         syncBreeds()
         getBreeds()
         search()
     }
 
-    fun onAction(action: BreedUiAction) {
+    fun onAction(action: BreedsUiAction) {
         when (action) {
-            BreedUiAction.LoadMore -> TODO()
-            is BreedUiAction.Navigation.DetailScreen -> TODO()
-            is BreedUiAction.Search -> onSearchQueryChanged(query = action.query)
-            is BreedUiAction.ToggleFavorite -> toggleFavorite(breedId = action.id)
+            BreedsUiAction.LoadMore -> syncBreeds()
+            is BreedsUiAction.Navigation -> navigate(action)
+            is BreedsUiAction.Search -> onSearchQueryChanged(query = action.query)
+            is BreedsUiAction.ToggleFavorite -> toggleFavorite(breedId = action.id)
+            BreedsUiAction.Refresh -> refreshBreeds()
         }
     }
 
-    fun syncBreeds() {
+    private fun syncBreeds() {
         if (uiState.value.isLoading) return
         _uiState.update {
             it.copy(isLoading = true)
@@ -58,25 +65,19 @@ class BreedsViewModel @Inject constructor(
                 }
             }.onFailure { throwable ->
                 _uiState.update {
-                    it.copy(error = throwable.message, isLoading = false)
+                    it.copy(isLoading = false)
                 }
+                _uiEvent.tryEmit(BreedsUiEvent.UiMessage(throwable.message.toString()))
             }
         }
     }
 
-    fun getBreeds() {
+    private fun getBreeds() {
         viewModelScope.launch(Dispatchers.IO) {
             getBreedsUsecase().collect { newBreeds ->
-//                if (newBreeds.isEmpty()) {
-//                    _uiState.update {
-//                        it.copy(isLoading = false, hasMore = false)
-//                    }
-//                    return@collect
-//                }
                 _uiState.update {
                     it.copy(
                         breeds = newBreeds.toPersistentList(),
-//                        page = it.page + 1,
                         isLoading = false,
                     )
                 }
@@ -106,12 +107,6 @@ class BreedsViewModel @Inject constructor(
         }
     }
 
-    private fun consumeError() {
-        _uiState.update {
-            it.copy(error = null)
-        }
-    }
-
     private fun refreshBreeds() {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update {
@@ -135,6 +130,14 @@ class BreedsViewModel @Inject constructor(
     private fun toggleFavorite(breedId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             setBreedFavoriteUsecase(breedId)
+        }
+    }
+
+    private fun navigate(action: BreedsUiAction.Navigation) {
+        when (action) {
+            is BreedsUiAction.Navigation.DetailScreen -> {
+                _uiEvent.tryEmit(BreedsUiEvent.Navigation.DetailScreen(action.breedId))
+            }
         }
     }
 }
