@@ -10,6 +10,7 @@ data class BreedsUiState(
     val breeds: PersistentList<Breed> = persistentListOf(),
     val filteredBreeds: PersistentList<Breed> = persistentListOf(),
     val page: Int = 0,
+    val searchQuery: String = "",
     val error: String? = null,
     val isLoading: Boolean = false,
     val hasMore: Boolean = true,

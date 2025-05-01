@@ -2,7 +2,6 @@ package com.example.presentation.screen.breed_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.model.Breed
 import com.example.domain.usecase.GetBreedsUsecase
 import com.example.domain.usecase.SetBreedFavoriteUsecase
 import com.example.domain.usecase.SyncBreedsUsecase
@@ -14,6 +13,8 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,13 +32,14 @@ class BreedsViewModel @Inject constructor(
     init {
         syncBreeds()
         getBreeds()
+        search()
     }
 
     fun onAction(action: BreedUiAction) {
         when (action) {
             BreedUiAction.LoadMore -> TODO()
             is BreedUiAction.Navigation.DetailScreen -> TODO()
-            is BreedUiAction.Search -> TODO()
+            is BreedUiAction.Search -> onSearchQueryChanged(query = action.query)
             is BreedUiAction.ToggleFavorite -> toggleFavorite(breedId = action.id)
         }
     }
@@ -82,26 +84,35 @@ class BreedsViewModel @Inject constructor(
         }
     }
 
-    fun onSearchQueryChanged(query: String) {
-        val filteredList = if (query.isBlank()) {
-            uiState.value.breeds
-        } else {
-            uiState.value.breeds.filter {
-                it.name.contains(query, ignoreCase = true)
+    private fun search() {
+        viewModelScope.launch(Dispatchers.IO) {
+            uiState.distinctUntilChangedBy {
+                it.searchQuery
+            }.map {
+                it.searchQuery
+            }.collect { query ->
+                _uiState.update {
+                    it.copy(filteredBreeds = it.breeds.filter { breed ->
+                        breed.name.contains(query, ignoreCase = true)
+                    }.toPersistentList())
+                }
             }
-        }
-        _uiState.update {
-            it.copy(filteredBreeds = filteredList.toPersistentList())
         }
     }
 
-    fun consumeError() {
+    private fun onSearchQueryChanged(query: String) {
+        _uiState.update {
+            it.copy(searchQuery = query)
+        }
+    }
+
+    private fun consumeError() {
         _uiState.update {
             it.copy(error = null)
         }
     }
 
-    fun refreshBreeds() {
+    private fun refreshBreeds() {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update {
                 it.copy(
