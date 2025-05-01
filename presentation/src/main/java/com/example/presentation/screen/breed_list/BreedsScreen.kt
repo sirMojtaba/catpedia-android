@@ -37,6 +37,7 @@ import com.example.presentation.screen.breed_list.component.BreedItem
 import com.example.presentation.screen.breed_list.model.BreedsUiAction
 import com.example.presentation.screen.breed_list.model.BreedsUiEvent
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 
@@ -49,11 +50,11 @@ fun BreedsRoute(
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
-        viewModel.uiEvent.collect {
-            when (it) {
-                is BreedsUiEvent.Navigation.DetailScreen -> onBreedClick(it.breedId)
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                is BreedsUiEvent.Navigation.DetailScreen -> onBreedClick(uiEvent.breedId)
                 is BreedsUiEvent.UiMessage -> {
-                    it.message.let { errorMessage ->
+                    uiEvent.message.let { errorMessage ->
                         snackbarHostState.showSnackbar(errorMessage)
                     }
                 }
@@ -72,7 +73,7 @@ fun BreedsRoute(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, FlowPreview::class)
 @Composable
 private fun BreedsScreen(
     isRefreshing: Boolean,
