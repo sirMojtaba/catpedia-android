@@ -19,8 +19,8 @@ interface BreedDao {
     @Query("SELECT * FROM breeds WHERE id = :breedId")
     fun getBreed(breedId: String): Flow<Breed>
 
-    @Query("UPDATE breeds SET isFavorite = :isFavorite WHERE id = :breedId")
-    suspend fun updateFavorite(breedId: String, isFavorite: Boolean)
+    @Query("UPDATE breeds SET isFavorite = NOT isFavorite WHERE id = :breedId")
+    suspend fun updateFavorite(breedId: String)
 
     @Query("SELECT id FROM breeds WHERE isFavorite= 1")
     fun getAllFavorites(): Flow<List<String>>

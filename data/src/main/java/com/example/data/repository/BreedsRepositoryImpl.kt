@@ -42,7 +42,7 @@ class BreedsRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun toggleFavorite(breedId: String, isFavorite: Boolean) {
-        dao.updateFavorite(breedId, isFavorite)
+    override suspend fun toggleFavorite(breedId: String) {
+        dao.updateFavorite(breedId)
     }
 }

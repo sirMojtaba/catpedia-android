@@ -4,6 +4,6 @@ import com.example.domain.repository.BreedsRepository
 
 class SetBreedFavoriteUsecase(private val repository: BreedsRepository) {
 
-    suspend operator fun invoke(breedId: String, isFavorite: Boolean) =
-        repository.toggleFavorite(breedId, isFavorite)
+    suspend operator fun invoke(breedId: String) =
+        repository.toggleFavorite(breedId)
 }

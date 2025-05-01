@@ -6,6 +6,7 @@ import com.example.domain.model.Breed
 import com.example.domain.usecase.GetBreedsUsecase
 import com.example.domain.usecase.SetBreedFavoriteUsecase
 import com.example.domain.usecase.SyncBreedsUsecase
+import com.example.presentation.screen.breed_list.model.BreedUiAction
 import com.example.presentation.screen.breed_list.model.BreedsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -30,6 +31,15 @@ class BreedsViewModel @Inject constructor(
     init {
         syncBreeds()
         getBreeds()
+    }
+
+    fun onAction(action: BreedUiAction) {
+        when (action) {
+            BreedUiAction.LoadMore -> TODO()
+            is BreedUiAction.Navigation.DetailScreen -> TODO()
+            is BreedUiAction.Search -> TODO()
+            is BreedUiAction.ToggleFavorite -> toggleFavorite(breedId = action.id)
+        }
     }
 
     fun syncBreeds() {
@@ -111,28 +121,9 @@ class BreedsViewModel @Inject constructor(
         }
     }
 
-    fun toggleFavorite(breed: Breed) {
+    private fun toggleFavorite(breedId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val isFavorite = !breed.isFavorite
-            runCatching {
-                setBreedFavoriteUsecase(breed.id, isFavorite)
-            }.onSuccess {
-                val updatedList = _uiState.value.breeds.map {
-                    if (it.id == breed.id) it.copy(isFavorite = isFavorite) else it
-                }
-                _uiState.update {
-                    it.copy(
-                        breeds = updatedList.toPersistentList(),
-                        filteredBreeds = updatedList.toPersistentList()
-                    )
-                }
-            }.onFailure { throwable ->
-                _uiState.update {
-                    it.copy(
-                        error = throwable.message,
-                    )
-                }
-            }
+            setBreedFavoriteUsecase(breedId)
         }
     }
 }
