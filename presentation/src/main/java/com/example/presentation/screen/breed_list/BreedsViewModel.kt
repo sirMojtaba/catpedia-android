@@ -67,7 +67,7 @@ class BreedsViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(isLoading = false)
                 }
-                _uiEvent.tryEmit(BreedsUiEvent.UiMessage(throwable.message.toString()))
+                _uiEvent.emit(BreedsUiEvent.UiMessage(throwable.message.toString()))
             }
         }
     }
@@ -136,7 +136,9 @@ class BreedsViewModel @Inject constructor(
     private fun navigate(action: BreedsUiAction.Navigation) {
         when (action) {
             is BreedsUiAction.Navigation.DetailScreen -> {
-                _uiEvent.tryEmit(BreedsUiEvent.Navigation.DetailScreen(action.breedId))
+                viewModelScope.launch {
+                    _uiEvent.emit(BreedsUiEvent.Navigation.DetailScreen(action.breedId))
+                }
             }
         }
     }

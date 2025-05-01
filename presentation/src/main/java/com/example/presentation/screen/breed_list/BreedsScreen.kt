@@ -32,32 +32,71 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.domain.model.Breed
 import com.example.presentation.screen.breed_list.component.BreedItem
+import com.example.presentation.screen.breed_list.model.BreedsUiAction
+import com.example.presentation.screen.breed_list.model.BreedsUiEvent
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BreedsScreen(
+fun BreedsRoute(
     viewModel: BreedsViewModel = hiltViewModel(),
     onBreedClick: (String) -> Unit
 ) {
-
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect {
+            when (it) {
+                is BreedsUiEvent.Navigation.DetailScreen -> onBreedClick(it.breedId)
+                is BreedsUiEvent.UiMessage -> {
+                    it.message.let { errorMessage ->
+                        snackbarHostState.showSnackbar(errorMessage)
+                    }
+                }
+            }
+        }
+    }
+
+    BreedsScreen(
+        isRefreshing = uiState.isRefreshing,
+        hasMore = uiState.hasMore,
+        isLoading = uiState.isLoading,
+        breeds = uiState.breeds,
+        filteredBreeds = uiState.filteredBreeds,
+        snackbarHostState = snackbarHostState,
+        onAction = viewModel::onAction
+    )
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun BreedsScreen(
+    isRefreshing: Boolean,
+    hasMore: Boolean,
+    isLoading: Boolean,
+    breeds: PersistentList<Breed>,
+    filteredBreeds: PersistentList<Breed>,
+    snackbarHostState: SnackbarHostState,
+    onAction: (BreedsUiAction) -> Unit
+) {
+
     val listState = rememberLazyListState()
     var searchQuery by rememberSaveable { mutableStateOf("") }
-    val snackbarHostState = remember { SnackbarHostState() }
     val pullToRefreshState =
-        rememberPullRefreshState(refreshing = uiState.isRefreshing, onRefresh = {
-            viewModel.refreshBreeds()
+        rememberPullRefreshState(refreshing = isRefreshing, onRefresh = {
+            onAction(BreedsUiAction.Refresh)
         })
 
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo }
             .collect { layoutInfo ->
                 val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()
-                if (lastVisibleItem != null && lastVisibleItem.index >= uiState.breeds.lastIndex && searchQuery.isBlank()) {
-                    viewModel.syncBreeds()
+                if (lastVisibleItem != null && lastVisibleItem.index >= breeds.lastIndex && searchQuery.isBlank()) {
+                    onAction(BreedsUiAction.LoadMore)
                 }
             }
     }
@@ -67,15 +106,8 @@ fun BreedsScreen(
             .debounce { 300L }
             .distinctUntilChanged()
             .collect { query ->
-                viewModel.onSearchQueryChanged(query)
+                onAction(BreedsUiAction.Search(query))
             }
-    }
-
-    LaunchedEffect(uiState.error) {
-        uiState.error?.let { errorMessage ->
-            snackbarHostState.showSnackbar(errorMessage)
-            viewModel.consumeError()
-        }
     }
 
     Scaffold { innerPadding ->
@@ -104,21 +136,21 @@ fun BreedsScreen(
             ) {
                 LazyColumn(modifier = Modifier.padding(4.dp), state = listState) {
                     itemsIndexed(
-                        items = if (searchQuery.isBlank()) uiState.breeds else uiState.filteredBreeds,
+                        items = if (searchQuery.isBlank()) breeds else filteredBreeds,
                         key = { _, item -> item.id }
                     ) { index, item ->
                         BreedItem(
                             modifier = Modifier
                                 .padding(4.dp)
                                 .fillMaxWidth()
-                                .clickable { onBreedClick(item.id) },
+                                .clickable { onAction(BreedsUiAction.Navigation.DetailScreen(item.id)) },
                             breed = item,
                             isFavorite = item.isFavorite,
-                            onFavoriteClick = { viewModel.toggleFavorite(item) }
+                            onFavoriteClick = { onAction(BreedsUiAction.ToggleFavorite(item.id)) }
                         )
                     }
 
-                    if (uiState.isLoading && uiState.hasMore && searchQuery.isBlank()) {
+                    if (isLoading && hasMore && searchQuery.isBlank()) {
                         item {
                             Box(
                                 modifier = Modifier
@@ -132,7 +164,7 @@ fun BreedsScreen(
                     }
                 }
                 PullRefreshIndicator(
-                    refreshing = uiState.isRefreshing,
+                    refreshing = isRefreshing,
                     state = pullToRefreshState,
                     modifier = Modifier.align(
                         Alignment.TopCenter

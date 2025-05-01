@@ -2,15 +2,14 @@ package com.example.presentation.screen.breed_list.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.domain.model.Breed
-import com.example.presentation.screen.breed_list.BreedsScreen
+import com.example.presentation.screen.breed_list.BreedsRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object BreedsRoute
+data object BreedsNavigationRoute
 
 fun NavGraphBuilder.breedsScreen(onBreedClick: (String) -> Unit) {
-    composable<BreedsRoute> {
-        BreedsScreen(onBreedClick = onBreedClick)
+    composable<BreedsNavigationRoute> {
+        BreedsRoute(onBreedClick = onBreedClick)
     }
 }

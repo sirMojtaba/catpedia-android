@@ -50,7 +50,7 @@ fun BreedDetailScreen(
             )
 
             IconButton(
-                onClick = { viewModel.toggleFavorite(uiState.id, uiState.isFavorite) },
+                onClick = { viewModel.toggleFavorite(uiState.id) },
                 modifier = Modifier
                     .padding(12.dp)
                     .size(40.dp)

@@ -52,20 +52,9 @@ class BreedDetailViewModel @Inject constructor(
         }
     }
 
-    fun toggleFavorite(breedId: String, isFavorite: Boolean) {
+    fun toggleFavorite(breedId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val isFavorite = !isFavorite
-            runCatching {
-                setBreedFavoriteUsecase(breedId, isFavorite)
-            }.onSuccess {
-                _uiState.update {
-                    it.copy(isFavorite = isFavorite)
-                }
-            }.onFailure { throwable ->
-                _uiState.update {
-                    it.copy(error = throwable.message.toString())
-                }
-            }
+            setBreedFavoriteUsecase(breedId)
         }
     }
 }
